@@ -12,32 +12,23 @@ model User {
   name      String
   nisNip    String   @unique
   password  String
-  role      String   // "GURU" or "SISWA"
+  role      String   // "GURU" atau "SISWA"
   kelasId   String?
   kelas     Kelas?   @relation(fields: [kelasId], references: [id])
-  nilai     Nilai[]
-  absensi   Absensi[]
+  Absensi   Absensi[]
 }
 
 model Kelas {
-  id    String @id @default(cuid())
-  nama  String // e.g., "XI F1"
-  siswa User[]
-}
-
-model Nilai {
-  id        String @id @default(cuid())
-  siswaId   String
-  siswa     User   @relation(fields: [siswaId], references: [id])
-  jenis     String // "KEHADIRAN", "CATATAN", "ULANGAN", "SIKAP"
-  skor      Float
-  keterangan String?
+  id     String  @id @default(cuid())
+  nama   String  @unique
+  users  User[]
 }
 
 model Absensi {
   id        String   @id @default(cuid())
-  siswaId   String
-  siswa     User     @relation(fields: [siswaId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
   tanggal   DateTime @default(now())
-  status    String   // "H", "S", "I", "A"
+  status    String   // "HADIR", "IZIN", "SAKIT", "ALPHA"
+  keterangan String?
 }
